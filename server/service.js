@@ -7,11 +7,13 @@ const service = express();
 
 service.use(express.json());
 
+const timeZoneAPIKey = process.env.TIME_ZONE_API_KEY || timeZoneApiKey;
+const geocodingAPIKey = process.env.GEOCODE_API_KEY || geocodingApiKey;
 
 service.get('/service/:location', (req, res, next) => {
   const locationAddress = req.params.location;
 
-  const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${locationAddress}&key=${geocodingApiKey}`;
+  const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${locationAddress}&key=${geocodingAPIKey}`;
 
   request.get(geocodeUrl, (err, response) => {
     if (err) {
@@ -24,7 +26,7 @@ service.get('/service/:location', (req, res, next) => {
 
     const timestamp = +moment().format('X');
 
-    const timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${timeZoneApiKey}`;
+    const timezoneUrl = `https://maps.googleapis.com/maps/api/timezone/json?location=${lat},${lng}&timestamp=${timestamp}&key=${timeZoneAPIKey}`;
     request.get(timezoneUrl, (err, response) => {
       if (err) {
         console.error(err);
